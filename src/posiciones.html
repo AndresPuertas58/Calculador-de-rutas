@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.0/css/all.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css"/>
+    
+            <meta name="viewport" content="width=device-width,
+                initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+            <style>
+                #map_68a8defc5e57138bc3444784ccf5e522 {
+                    position: relative;
+                    width: 100.0%;
+                    height: 100.0%;
+                    left: 0.0%;
+                    top: 0.0%;
+                }
+                .leaflet-container { font-size: 1rem; }
+            </style>
+
+            <style>html, body {
+                width: 100%;
+                height: 100%;
+                margin: 0;
+                padding: 0;
+            }
+            </style>
+
+            <style>#map {
+                position:absolute;
+                top:0;
+                bottom:0;
+                right:0;
+                left:0;
+                }
+            </style>
+
+            <script>
+                L_NO_TOUCH = false;
+                L_DISABLE_3D = false;
+            </script>
+
+        
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.1.0/leaflet.markercluster.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.1.0/MarkerCluster.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.1.0/MarkerCluster.Default.css"/>
+</head>
+<body>
+    
+    
+            <div class="folium-map" id="map_68a8defc5e57138bc3444784ccf5e522" ></div>
+        
+</body>
+<script>
+    
+    
+            var map_68a8defc5e57138bc3444784ccf5e522 = L.map(
+                "map_68a8defc5e57138bc3444784ccf5e522",
+                {
+                    center: [4.65, -74.1],
+                    crs: L.CRS.EPSG3857,
+                    ...{
+  "zoom": 6,
+  "zoomControl": true,
+  "preferCanvas": false,
+}
+
+                }
+            );
+
+            
+
+        
+    
+            var tile_layer_bc597e6072366915bd3cc3501ed36304 = L.tileLayer(
+                "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+                {
+  "minZoom": 0,
+  "maxZoom": 19,
+  "maxNativeZoom": 19,
+  "noWrap": false,
+  "attribution": "\u0026copy; \u003ca href=\"https://www.openstreetmap.org/copyright\"\u003eOpenStreetMap\u003c/a\u003e contributors",
+  "subdomains": "abc",
+  "detectRetina": false,
+  "tms": false,
+  "opacity": 1,
+}
+
+            );
+        
+    
+            tile_layer_bc597e6072366915bd3cc3501ed36304.addTo(map_68a8defc5e57138bc3444784ccf5e522);
+        
+    
+            var marker_cluster_88a8f129937bf0c80693aa78df439cda = L.markerClusterGroup(
+                {
+  "camiones": "Camiones",
+}
+            );
+        
+    
+            var marker_9219f3a4114a264ee80b0d00950673a7 = L.marker(
+                [4.60971, -74.08175],
+                {
+}
+            ).addTo(marker_cluster_88a8f129937bf0c80693aa78df439cda);
+        
+    
+            var icon_4e8ecd44167e0d7ddfb370c8d3fb741f = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "red",
+  "iconColor": "white",
+  "icon": "truck",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_08bc1bc02be3b1ab2bbe1c02b1dc24e1 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_1f9e7174fe1a9df4d13d504313d817bc = $(`<div id="html_1f9e7174fe1a9df4d13d504313d817bc" style="width: 100.0%; height: 100.0%;">                 <b>Placa:</b> ABC123<br>                 <b>Estado:</b> en_ruta<br>             </div>`)[0];
+                popup_08bc1bc02be3b1ab2bbe1c02b1dc24e1.setContent(html_1f9e7174fe1a9df4d13d504313d817bc);
+            
+        
+
+        marker_9219f3a4114a264ee80b0d00950673a7.bindPopup(popup_08bc1bc02be3b1ab2bbe1c02b1dc24e1)
+        ;
+
+        
+    
+    
+            marker_9219f3a4114a264ee80b0d00950673a7.bindTooltip(
+                `<div>
+                     Camión ABC123
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_9219f3a4114a264ee80b0d00950673a7.setIcon(icon_4e8ecd44167e0d7ddfb370c8d3fb741f);
+            
+    
+            var marker_ba2d3262780736a690e0e146a9431f9c = L.marker(
+                [6.2442, -75.58121],
+                {
+}
+            ).addTo(marker_cluster_88a8f129937bf0c80693aa78df439cda);
+        
+    
+            var icon_339256b2418402c8200c3088b31b58ea = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "red",
+  "iconColor": "white",
+  "icon": "truck",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_40749d114299706bdf7cbeb71d04736e = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_7237b4468b56917246862a9d2e6a3f1f = $(`<div id="html_7237b4468b56917246862a9d2e6a3f1f" style="width: 100.0%; height: 100.0%;">                 <b>Placa:</b> DEF456<br>                 <b>Estado:</b> en_ruta<br>             </div>`)[0];
+                popup_40749d114299706bdf7cbeb71d04736e.setContent(html_7237b4468b56917246862a9d2e6a3f1f);
+            
+        
+
+        marker_ba2d3262780736a690e0e146a9431f9c.bindPopup(popup_40749d114299706bdf7cbeb71d04736e)
+        ;
+
+        
+    
+    
+            marker_ba2d3262780736a690e0e146a9431f9c.bindTooltip(
+                `<div>
+                     Camión DEF456
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_ba2d3262780736a690e0e146a9431f9c.setIcon(icon_339256b2418402c8200c3088b31b58ea);
+            
+    
+            var marker_f5385b4865e4d9050d93e7bd698f4aec = L.marker(
+                [3.45165, -76.53198],
+                {
+}
+            ).addTo(marker_cluster_88a8f129937bf0c80693aa78df439cda);
+        
+    
+            var icon_1c651ee9c33d57ae2df03c8667aa0f5e = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "green",
+  "iconColor": "white",
+  "icon": "truck",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_cd5db07b9d89094c126c140154f8cfe6 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_dd695933b7fb427a59757d2e1e219cd1 = $(`<div id="html_dd695933b7fb427a59757d2e1e219cd1" style="width: 100.0%; height: 100.0%;">                 <b>Placa:</b> GHI789<br>                 <b>Estado:</b> disponible<br>             </div>`)[0];
+                popup_cd5db07b9d89094c126c140154f8cfe6.setContent(html_dd695933b7fb427a59757d2e1e219cd1);
+            
+        
+
+        marker_f5385b4865e4d9050d93e7bd698f4aec.bindPopup(popup_cd5db07b9d89094c126c140154f8cfe6)
+        ;
+
+        
+    
+    
+            marker_f5385b4865e4d9050d93e7bd698f4aec.bindTooltip(
+                `<div>
+                     Camión GHI789
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_f5385b4865e4d9050d93e7bd698f4aec.setIcon(icon_1c651ee9c33d57ae2df03c8667aa0f5e);
+            
+    
+            var marker_5e96bcca16201d4a8fb1830d3880e4e2 = L.marker(
+                [10.96854, -74.78132],
+                {
+}
+            ).addTo(marker_cluster_88a8f129937bf0c80693aa78df439cda);
+        
+    
+            var icon_45dd11ad6c3a4a023471f400e7e885d7 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "red",
+  "iconColor": "white",
+  "icon": "truck",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_3df179ac211d5f25d4cfa8cc770580ff = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_59f930583385bd92ced318579d21e76e = $(`<div id="html_59f930583385bd92ced318579d21e76e" style="width: 100.0%; height: 100.0%;">                 <b>Placa:</b> JKL012<br>                 <b>Estado:</b> mantenimiento<br>             </div>`)[0];
+                popup_3df179ac211d5f25d4cfa8cc770580ff.setContent(html_59f930583385bd92ced318579d21e76e);
+            
+        
+
+        marker_5e96bcca16201d4a8fb1830d3880e4e2.bindPopup(popup_3df179ac211d5f25d4cfa8cc770580ff)
+        ;
+
+        
+    
+    
+            marker_5e96bcca16201d4a8fb1830d3880e4e2.bindTooltip(
+                `<div>
+                     Camión JKL012
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_5e96bcca16201d4a8fb1830d3880e4e2.setIcon(icon_45dd11ad6c3a4a023471f400e7e885d7);
+            
+    
+            var marker_2d87987fc3e25f7481cf7664d0eb25f8 = L.marker(
+                [10.39105, -75.47943],
+                {
+}
+            ).addTo(marker_cluster_88a8f129937bf0c80693aa78df439cda);
+        
+    
+            var icon_d19c3c72cbe8307d237c16d25638aa96 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "green",
+  "iconColor": "white",
+  "icon": "truck",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_e0e4e24f2d0da31b9f4c7c5576526fd8 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_68976bdff1716410b02289532a5d7a52 = $(`<div id="html_68976bdff1716410b02289532a5d7a52" style="width: 100.0%; height: 100.0%;">                 <b>Placa:</b> MNO345<br>                 <b>Estado:</b> disponible<br>             </div>`)[0];
+                popup_e0e4e24f2d0da31b9f4c7c5576526fd8.setContent(html_68976bdff1716410b02289532a5d7a52);
+            
+        
+
+        marker_2d87987fc3e25f7481cf7664d0eb25f8.bindPopup(popup_e0e4e24f2d0da31b9f4c7c5576526fd8)
+        ;
+
+        
+    
+    
+            marker_2d87987fc3e25f7481cf7664d0eb25f8.bindTooltip(
+                `<div>
+                     Camión MNO345
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_2d87987fc3e25f7481cf7664d0eb25f8.setIcon(icon_d19c3c72cbe8307d237c16d25638aa96);
+            
+    
+            var marker_e98daa66b2bc0cf93374d66a0c514624 = L.marker(
+                [7.11935, -73.12274],
+                {
+}
+            ).addTo(marker_cluster_88a8f129937bf0c80693aa78df439cda);
+        
+    
+            var icon_272b4bb8759bd536a970c9e8508fe5a5 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "red",
+  "iconColor": "white",
+  "icon": "truck",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_e6d56413d8cee00bd110425d2b539ad9 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_049f0c75c1705242ae67cc11a80c8ce1 = $(`<div id="html_049f0c75c1705242ae67cc11a80c8ce1" style="width: 100.0%; height: 100.0%;">                 <b>Placa:</b> PQR678<br>                 <b>Estado:</b> en_ruta<br>             </div>`)[0];
+                popup_e6d56413d8cee00bd110425d2b539ad9.setContent(html_049f0c75c1705242ae67cc11a80c8ce1);
+            
+        
+
+        marker_e98daa66b2bc0cf93374d66a0c514624.bindPopup(popup_e6d56413d8cee00bd110425d2b539ad9)
+        ;
+
+        
+    
+    
+            marker_e98daa66b2bc0cf93374d66a0c514624.bindTooltip(
+                `<div>
+                     Camión PQR678
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_e98daa66b2bc0cf93374d66a0c514624.setIcon(icon_272b4bb8759bd536a970c9e8508fe5a5);
+            
+    
+            var marker_d84b8b8ef7f663ab77082a1ad7c9a524 = L.marker(
+                [4.6155333, -74.0690083],
+                {
+}
+            ).addTo(marker_cluster_88a8f129937bf0c80693aa78df439cda);
+        
+    
+            var icon_8380520f76ec6284a487e21b87c1aa73 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "green",
+  "iconColor": "white",
+  "icon": "truck",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_503e571765900d950876036f458b257b = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_d296fd26a7b1963d627dc1a2abd0f0ab = $(`<div id="html_d296fd26a7b1963d627dc1a2abd0f0ab" style="width: 100.0%; height: 100.0%;">                 <b>Placa:</b> STU901<br>                 <b>Estado:</b> disponible<br>             </div>`)[0];
+                popup_503e571765900d950876036f458b257b.setContent(html_d296fd26a7b1963d627dc1a2abd0f0ab);
+            
+        
+
+        marker_d84b8b8ef7f663ab77082a1ad7c9a524.bindPopup(popup_503e571765900d950876036f458b257b)
+        ;
+
+        
+    
+    
+            marker_d84b8b8ef7f663ab77082a1ad7c9a524.bindTooltip(
+                `<div>
+                     Camión STU901
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_d84b8b8ef7f663ab77082a1ad7c9a524.setIcon(icon_8380520f76ec6284a487e21b87c1aa73);
+            
+    
+            var marker_a55bc5d38a1cece0dab68165a2d985c1 = L.marker(
+                [5.07028, -75.51382],
+                {
+}
+            ).addTo(marker_cluster_88a8f129937bf0c80693aa78df439cda);
+        
+    
+            var icon_5f6c89d44c74dad7c848dc80052cb5c5 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "red",
+  "iconColor": "white",
+  "icon": "truck",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_621c989957ca9aa2563b3d49123d64a5 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_4f4d20183c2db7772c903c4e85ac1817 = $(`<div id="html_4f4d20183c2db7772c903c4e85ac1817" style="width: 100.0%; height: 100.0%;">                 <b>Placa:</b> VWX234<br>                 <b>Estado:</b> en_ruta<br>             </div>`)[0];
+                popup_621c989957ca9aa2563b3d49123d64a5.setContent(html_4f4d20183c2db7772c903c4e85ac1817);
+            
+        
+
+        marker_a55bc5d38a1cece0dab68165a2d985c1.bindPopup(popup_621c989957ca9aa2563b3d49123d64a5)
+        ;
+
+        
+    
+    
+            marker_a55bc5d38a1cece0dab68165a2d985c1.bindTooltip(
+                `<div>
+                     Camión VWX234
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_a55bc5d38a1cece0dab68165a2d985c1.setIcon(icon_5f6c89d44c74dad7c848dc80052cb5c5);
+            
+    
+            var marker_c6512c81e0a8cdafd0db79dfa99751e2 = L.marker(
+                [4.43889, -75.23222],
+                {
+}
+            ).addTo(marker_cluster_88a8f129937bf0c80693aa78df439cda);
+        
+    
+            var icon_b4fd969408f5b6a164b31c15fb5a741d = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "red",
+  "iconColor": "white",
+  "icon": "truck",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_9d3a2b7bb7a845bf2810927c13bfc0a9 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_8fd42a6d48ac1cbd2644f1c63c5bba65 = $(`<div id="html_8fd42a6d48ac1cbd2644f1c63c5bba65" style="width: 100.0%; height: 100.0%;">                 <b>Placa:</b> YZA567<br>                 <b>Estado:</b> en_ruta<br>             </div>`)[0];
+                popup_9d3a2b7bb7a845bf2810927c13bfc0a9.setContent(html_8fd42a6d48ac1cbd2644f1c63c5bba65);
+            
+        
+
+        marker_c6512c81e0a8cdafd0db79dfa99751e2.bindPopup(popup_9d3a2b7bb7a845bf2810927c13bfc0a9)
+        ;
+
+        
+    
+    
+            marker_c6512c81e0a8cdafd0db79dfa99751e2.bindTooltip(
+                `<div>
+                     Camión YZA567
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_c6512c81e0a8cdafd0db79dfa99751e2.setIcon(icon_b4fd969408f5b6a164b31c15fb5a741d);
+            
+    
+            var marker_78724f71b3669642d3d66e920f87125e = L.marker(
+                [4.142, -73.62664],
+                {
+}
+            ).addTo(marker_cluster_88a8f129937bf0c80693aa78df439cda);
+        
+    
+            var icon_2eb0628432c1aee8c6f90dc2c0467759 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "green",
+  "iconColor": "white",
+  "icon": "truck",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_c986b206e2c8900f07a6c3deea297c50 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_0524cdc1116a86e74dfc791c6b00f40c = $(`<div id="html_0524cdc1116a86e74dfc791c6b00f40c" style="width: 100.0%; height: 100.0%;">                 <b>Placa:</b> BCD890<br>                 <b>Estado:</b> disponible<br>             </div>`)[0];
+                popup_c986b206e2c8900f07a6c3deea297c50.setContent(html_0524cdc1116a86e74dfc791c6b00f40c);
+            
+        
+
+        marker_78724f71b3669642d3d66e920f87125e.bindPopup(popup_c986b206e2c8900f07a6c3deea297c50)
+        ;
+
+        
+    
+    
+            marker_78724f71b3669642d3d66e920f87125e.bindTooltip(
+                `<div>
+                     Camión BCD890
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_78724f71b3669642d3d66e920f87125e.setIcon(icon_2eb0628432c1aee8c6f90dc2c0467759);
+            
+    
+            marker_cluster_88a8f129937bf0c80693aa78df439cda.addTo(map_68a8defc5e57138bc3444784ccf5e522);
+        
+</script>
+</html>

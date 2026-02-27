@@ -1,0 +1,24 @@
+# Ignorar entorno virtual
+venv/
+ENV/
+*.venv/
+env/
+
+# Ignorar archivos temporales y de caché
+__pycache__/
+*.py[cod]
+*.log
+
+# Ignorar configuraciones de editores
+.vscode/
+.idea/
+
+# Ignorar dependencias compiladas y metadata
+*.egg-info/
+dist/
+build/
+
+# Ignorar archivos sensibles
+.env
+*.sqlite3
+*.db
