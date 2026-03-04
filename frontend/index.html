@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Freight Dashboard | Coltanques</title>
-    <link rel="stylesheet" href="style.css?v=2.6">
+    <link rel="stylesheet" href="style.css?v=3.0">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <!-- SweetAlert2 -->
@@ -21,10 +21,10 @@
             </div>
             <nav>
                 <ul>
-                    <li id="nav-dashboard" class="active"><a href="#" onclick="showTab('dashboard')"><i class="fas fa-chart-pie"></i> Dashboard</a></li>
-                    <li id="nav-fletes"><a href="#" onclick="showTab('fletes')"><i class="fas fa-list"></i> Fletes</a></li>
-                    <li id="nav-vehiculos"><a href="#" onclick="showTab('vehiculos')"><i class="fas fa-truck"></i> Vehículos</a></li>
-                    <li id="nav-conductores"><a href="#" onclick="showTab('conductores')"><i class="fas fa-users"></i> Conductores</a></li>
+                    <li id="nav-dashboard" class="active"><a href="#" onclick="mostrarPestana('dashboard')"><i class="fas fa-chart-pie"></i> Dashboard</a></li>
+                    <li id="nav-fletes"><a href="#" onclick="mostrarPestana('fletes')"><i class="fas fa-list"></i> Fletes</a></li>
+                    <li id="nav-vehiculos"><a href="#" onclick="mostrarPestana('vehiculos')"><i class="fas fa-truck"></i> Vehículos</a></li>
+                    <li id="nav-conductores"><a href="#" onclick="mostrarPestana('conductores')"><i class="fas fa-users"></i> Conductores</a></li>
                 </ul>
             </nav>
         </aside>
@@ -40,7 +40,7 @@
             </header>
 
             <div id="main-view-container">
-                <!-- TAB: DASHBOARD (Stats Only) -->
+                <!-- Pestana: DASHBOARD -->
                 <div id="tab-dashboard">
                     <section class="stats-grid">
                         <div class="stat-card">
@@ -58,12 +58,12 @@
                     </section>
                 </div>
 
-                <!-- TAB: FLETES (List Only) -->
+                <!-- Pestana: FLETES -->
                 <div id="tab-fletes" style="display:none;">
                     <section class="data-table-container">
                         <div class="table-header">
                             <h2>Listado de Fletes</h2>
-                            <button class="btn-refresh" onclick="fetchDashboardData()"><i class="fas fa-sync-alt"></i> Actualizar</button>
+                            <button class="btn-refresh" onclick="obtenerDatosDashboard()"><i class="fas fa-sync-alt"></i> Actualizar</button>
                         </div>
                         <table id="fletes-table">
                             <thead>
@@ -82,10 +82,10 @@
                     </section>
                 </div>
 
-                <!-- TAB: VEHICULOS -->
+                <!-- Pestana: VEHICULOS -->
                 <div id="tab-vehiculos" style="display:none;">
                     <section class="data-table-container">
-                        <div class="table-header"><h2>Listado de Vehículos</h2><button class="btn-refresh" onclick="fetchVehiculos()">Actualizar</button></div>
+                        <div class="table-header"><h2>Listado de Vehículos</h2><button class="btn-refresh" onclick="obtenerVehiculos()">Actualizar</button></div>
                         <table>
                             <thead><tr><th>ID</th><th>Placa</th><th>Marca</th><th>Color</th><th>Tipo</th><th>Estado</th><th>Flete</th><th>Coords</th></tr></thead>
                             <tbody id="vehiculos-body"></tbody>
@@ -93,22 +93,22 @@
                     </section>
                 </div>
 
-                <!-- TAB: CONDUCTORES -->
+                <!-- Pestana: CONDUCTORES -->
                 <div id="tab-conductores" style="display:none;">
                     <section class="data-table-container">
-                        <div class="table-header"><h2>Listado de Conductores</h2><button class="btn-refresh" onclick="fetchConductores()">Actualizar</button></div>
+                        <div class="table-header"><h2>Listado de Conductores</h2><button class="btn-refresh" onclick="obtenerConductores()">Actualizar</button></div>
                         <table>
-                            <thead><tr><th>Cód</th><th>Nombre</th><th>Cédula</th><th>Ciudad</th><th>Teléfono</th><th>Vehículo</th></tr></thead>
+                            <thead><tr><th>Cód</th><th>Nombre</th><th>Cédula</th><th>Licencia</th><th>Vacaciones</th><th>Incapacidad</th><th>Teléfono</th><th>Vehículo</th></tr></thead>
                             <tbody id="conductores-body"></tbody>
                         </table>
                     </section>
                 </div>
             </div>
 
-            <!-- VIEW: ASSIGNMENT (Shared for fletes table) -->
+            <!-- VISTA: ASIGNACION -->
             <div id="assignment-view" style="display: none;">
                 <div class="view-header">
-                    <button class="btn-back" onclick="showDashboard()"><i class="fas fa-arrow-left"></i> Volver</button>
+                    <button class="btn-back" onclick="volverAlDashboard()"><i class="fas fa-arrow-left"></i> Volver</button>
                     <h2 id="assignment-title">Optimizando Ruta</h2>
                 </div>
                 
@@ -133,6 +133,6 @@
     <!-- Leaflet JS -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="app.js?v=2.6"></script>
+    <script src="app.js?v=3.0"></script>
 </body>
 </html>

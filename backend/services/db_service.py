@@ -1,21 +1,21 @@
 from models.database import db, Conductor, Vehiculo, Flete
 
-class DbService:
-    def get_all_conductores(self):
+class ServicioBaseDatos:
+    def obtener_todos_los_conductores(self):
         return Conductor.query.all()
 
-    def get_vehiculo_by_id(self, cod_vehiculo):
+    def obtener_vehiculo_por_id(self, cod_vehiculo):
         return Vehiculo.query.get(cod_vehiculo)
 
-    def get_fletes_pendientes(self):
+    def obtener_fletes_pendientes(self):
         return Flete.query.filter_by(estado='sin_asignar').all()
 
-    def get_dashboard_data(self):
+    def obtener_datos_dashboard(self):
         fletes = Flete.query.all()
-        result = []
+        resultado = []
         
         for f in fletes:
-            f_data = {
+            datos_flete = {
                 "cod_flete": f.cod_flete,
                 "cliente": f.cliente,
                 "producto": f.producto,
@@ -25,17 +25,17 @@ class DbService:
                 "vehiculo": None
             }
             if f.vehiculo:
-                f_data["vehiculo"] = {
+                datos_flete["vehiculo"] = {
                     "placa": f.vehiculo.placa,
                     "marca": f.vehiculo.marca,
                     "estado": f.vehiculo.estado,
                     "lat": float(f.vehiculo.latitud) if f.vehiculo.latitud else 0,
                     "lon": float(f.vehiculo.longitud) if f.vehiculo.longitud else 0
                 }
-            result.append(f_data)
-        return result
+            resultado.append(datos_flete)
+        return resultado
 
-    def get_conductores_data(self):
+    def obtener_datos_conductores(self):
         conductores = Conductor.query.all()
         return [{
             "cod_empleado": c.cod_empleado,
@@ -43,10 +43,13 @@ class DbService:
             "cedula": c.cedula,
             "origen_ciudad": c.origen_ciudad or "N/A",
             "telefono": c.telefono or "N/A",
+            "licencia": c.licencia or "C3",
+            "vacaciones": f"{c.vacaciones_inicio} a {c.vacaciones_fin}" if c.vacaciones_inicio else "Activo",
+            "incapacidad": f"{c.incapacidad_inicio} a {c.incapacidad_fin}" if c.incapacidad_inicio else "No",
             "vehiculo_habitual": c.cod_vehiculo_habitual or "Sin asignar"
         } for c in conductores]
 
-    def get_vehiculos_data(self):
+    def obtener_datos_vehiculos(self):
         vehiculos = Vehiculo.query.all()
         return [{
             "cod_vehiculo": v.cod_vehiculo,
@@ -60,10 +63,9 @@ class DbService:
             "flete_activo": v.cod_flete_activo or "Ninguno"
         } for v in vehiculos]
 
-    def assign_truck_to_flete(self, cod_flete, cod_vehiculo):
+    def asignar_camion_a_flete(self, cod_flete, cod_vehiculo):
         """
         Actualiza el flete con el vehículo seleccionado y cambia su estado.
-        También marca el vehículo como 'En Ruta' (o similar).
         """
         flete = Flete.query.get(cod_flete)
         vehiculo = Vehiculo.query.get(cod_vehiculo)
@@ -76,7 +78,7 @@ class DbService:
             flete.cod_vehiculo_asignado = cod_vehiculo
             flete.estado = 'asignado'
             
-            # 2. Cambiar estado del vehículo para que no aparezca en más búsquedas
+            # 2. Cambiar estado del vehículo
             vehiculo.estado = 'En Ruta'
             
             db.session.commit()
@@ -85,10 +87,9 @@ class DbService:
             db.session.rollback()
             return False, str(e)
 
-    def unassign_truck_from_flete(self, cod_flete):
+    def desasignar_camion_de_flete(self, cod_flete):
         """
-        Desasigna el vehículo de un flete, devuelve el vehículo a estado Disponible
-        y el flete a estado Pendiente.
+        Desasigna el vehículo de un flete.
         """
         flete = Flete.query.get(cod_flete)
         if not flete:
@@ -98,11 +99,10 @@ class DbService:
 
         try:
             vehiculo = Vehiculo.query.get(flete.cod_vehiculo_asignado)
-            # Liberar vehículo
             if vehiculo:
                 vehiculo.estado = 'Disponible'
                 vehiculo.cod_flete_activo = None
-            # Resetear flete
+            
             flete.cod_vehiculo_asignado = None
             flete.estado = 'sin_asignar'
             db.session.commit()

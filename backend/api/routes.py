@@ -1,86 +1,85 @@
 from flask import Blueprint, jsonify, request
-from services.route_service import RouteService
-from services.db_service import DbService
-from services.assignment_service import AssignmentService
+from services.route_service import ServicioRuta
+from services.db_service import ServicioBaseDatos
+from services.assignment_service import ServicioAsignacion
 
 api_blueprint = Blueprint('api', __name__)
-route_service = RouteService()
-db_service = DbService()
-assignment_service = AssignmentService()
+servicio_ruta = ServicioRuta()
+servicio_bd = ServicioBaseDatos()
+servicio_asignacion = ServicioAsignacion()
 
 @api_blueprint.route('/calculate', methods=['POST'])
-def calculate_route():
-    data = request.json
-    result = route_service.get_truck_route(data.get('origin'), data.get('destination'))
-    return jsonify(result)
+def calcular_ruta():
+    datos = request.json
+    resultado = servicio_ruta.obtener_ruta_camion(datos.get('origin'), datos.get('destination'))
+    return jsonify(resultado)
 
 @api_blueprint.route('/dashboard', methods=['GET'])
-def get_dashboard():
+def obtener_dashboard():
     try:
-        data = db_service.get_dashboard_data()
-        return jsonify(data), 200
+        datos = servicio_bd.obtener_datos_dashboard()
+        return jsonify(datos), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
 @api_blueprint.route('/conductores', methods=['GET'])
-def get_conductores():
+def obtener_conductores():
     try:
-        data = db_service.get_conductores_data()
-        return jsonify(data), 200
+        datos = servicio_bd.obtener_datos_conductores()
+        return jsonify(datos), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
 @api_blueprint.route('/vehiculos', methods=['GET'])
-def get_vehiculos():
+def obtener_vehiculos():
     try:
-        data = db_service.get_vehiculos_data()
-        return jsonify(data), 200
+        datos = servicio_bd.obtener_datos_vehiculos()
+        return jsonify(datos), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
 @api_blueprint.route('/assign/<cod_flete>', methods=['GET'])
-def get_assignments(cod_flete):
+def obtener_asignaciones(cod_flete):
     """
     Endpoint que retorna las mejores opciones de transporte para un flete.
     """
     try:
-        recommendations = assignment_service.get_best_trucks_for_flete(cod_flete)
-        return jsonify(recommendations), 200
+        recomendaciones = servicio_asignacion.obtener_mejores_camiones_para_flete(cod_flete)
+        return jsonify(recomendaciones), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
 @api_blueprint.route('/assign', methods=['POST'])
-def assign_truck():
+def asignar_camion():
     """
     Endpoint para realizar la asignación física en la base de datos.
-    Recibe cod_flete y cod_vehiculo.
     """
-    data = request.json
-    cod_flete = data.get('cod_flete')
-    cod_vehiculo = data.get('cod_vehiculo')
+    datos = request.json
+    cod_flete = datos.get('cod_flete')
+    cod_vehiculo = datos.get('cod_vehiculo')
     
     if not cod_flete or not cod_vehiculo:
         return jsonify({"error": "cod_flete y cod_vehiculo son requeridos"}), 400
         
     try:
-        success, message = db_service.assign_truck_to_flete(cod_flete, cod_vehiculo)
-        if success:
-            return jsonify({"message": message}), 200
+        exito, mensaje = servicio_bd.asignar_camion_a_flete(cod_flete, cod_vehiculo)
+        if exito:
+            return jsonify({"message": mensaje}), 200
         else:
-            return jsonify({"error": message}), 500
+            return jsonify({"error": mensaje}), 500
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
 @api_blueprint.route('/unassign/<cod_flete>', methods=['POST'])
-def unassign_truck(cod_flete):
+def desasignar_camion(cod_flete):
     """
-    Endpoint para desasignar el vehículo de un flete y devolverlo a disponible.
+    Endpoint para desasignar el vehículo de un flete.
     """
     try:
-        success, message = db_service.unassign_truck_from_flete(cod_flete)
-        if success:
-            return jsonify({"message": message}), 200
+        exito, mensaje = servicio_bd.desasignar_camion_de_flete(cod_flete)
+        if exito:
+            return jsonify({"message": mensaje}), 200
         else:
-            return jsonify({"error": message}), 500
+            return jsonify({"error": mensaje}), 500
     except Exception as e:
         return jsonify({"error": str(e)}), 500

@@ -1,35 +1,35 @@
 import requests
 
-class RouteService:
+class ServicioRuta:
     def __init__(self):
         # Actualizado al nuevo puerto 8991
-        self.gh_url = "http://localhost:8991/route"
+        self.url_graphhopper = "http://localhost:8991/route"
 
-    def get_truck_route(self, origin, destination):
+    def obtener_ruta_camion(self, origen, destino):
         """
         Calcula la ruta entre origen y destino usando GraphHopper.
-        Retorna la distancia en metros y el tiempo en milisegundos.
+        Retorna la distancia en metros, el tiempo en milisegundos y los puntos de la ruta.
         """
-        if not origin or not destination:
+        if not origen or not destino:
             return None
             
-        params = {
-            "point": [f"{origin[0]},{origin[1]}", f"{destination[0]},{destination[1]}"],
+        parametros = {
+            "point": [f"{origen[0]},{origen[1]}", f"{destino[0]},{destino[1]}"],
             "profile": "truck",
             "locale": "es",
-            "calc_points": "true", # Ahora necesitamos los puntos para la geometría
+            "calc_points": "true",
             "points_encoded": "false"
         }
         
         try:
-            response = requests.get(self.gh_url, params=params)
-            if response.status_code == 200:
-                data = response.json()
-                path = data['paths'][0]
+            respuesta = requests.get(self.url_graphhopper, params=parametros)
+            if respuesta.status_code == 200:
+                datos = respuesta.json()
+                trayecto = datos['paths'][0]
                 return {
-                    "distance": path['distance'], # en metros
-                    "time": path['time'],         # en milisegundos
-                    "points": path['points']['coordinates'] # Lista de [lon, lat]
+                    "distance": trayecto['distance'], # mantenemos llaves de GraphHopper o mapeamos? Mapeamos para consistencia.
+                    "time": trayecto['time'],
+                    "points": trayecto['points']['coordinates']
                 }
             return None
         except Exception as e:

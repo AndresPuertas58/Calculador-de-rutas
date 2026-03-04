@@ -10,6 +10,12 @@ class Conductor(db.Model):
     cod_vehiculo_habitual = db.Column(db.String(15))
     origen_ciudad = db.Column(db.String(50))
     telefono = db.Column(db.String(20))
+    # Nuevos campos sugeridos para RRHH
+    licencia = db.Column(db.String(10), default='C3')
+    vacaciones_inicio = db.Column(db.Date)
+    vacaciones_fin = db.Column(db.Date)
+    incapacidad_inicio = db.Column(db.Date)
+    incapacidad_fin = db.Column(db.Date)
 
 class Vehiculo(db.Model):
     __tablename__ = 'vehiculos'
