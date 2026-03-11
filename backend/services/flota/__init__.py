@@ -1,0 +1,1 @@
+from services.flota.service import obtener_datos_vehiculos

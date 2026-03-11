@@ -1,9 +1,12 @@
 import requests
+import os
 
 class ServicioRuta:
     def __init__(self):
-        # Actualizado al nuevo puerto 8991
-        self.url_graphhopper = "http://localhost:8991/route"
+        # Lee la URL de GraphHopper desde env (docker-compose define http://graphhopper:8991)
+        # En desarrollo local sin Docker, el fallback es localhost:8991
+        base_url = os.getenv("GRAPHHOPPER_URL", "http://localhost:8991")
+        self.url_graphhopper = f"{base_url.rstrip('/')}/route"
 
     def obtener_ruta_camion(self, origen, destino):
         """

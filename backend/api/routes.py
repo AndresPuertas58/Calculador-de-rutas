@@ -1,12 +1,32 @@
+"""
+API Routes — Flask Backend
+Responsabilidad: Exponer los endpoints HTTP. No contiene lógica de negocio.
+
+Cada endpoint delega en el módulo especializado correspondiente:
+  - /conductores  → services/conductores/service.py
+  - /vehiculos    → services/flota/service.py
+  - /assign       → services/fletes/asignacion.py
+  - /reporte      → services/reportes/service.py
+"""
 from flask import Blueprint, jsonify, request
-from services.route_service import ServicioRuta
+from services.conductores.service import obtener_datos_conductores
+from services.flota.service import obtener_datos_vehiculos
+from services.fletes.asignacion import (
+    obtener_mejores_camiones_para_flete,
+    asignar_camion,
+    desasignar_camion
+)
+from services.reportes.service import obtener_reporte
 from services.db_service import ServicioBaseDatos
-from services.assignment_service import ServicioAsignacion
+from services.route_service import ServicioRuta
 
 api_blueprint = Blueprint('api', __name__)
+servicio_bd = ServicioBaseDatos()     # Solo para dashboard (usa modelos directamente)
 servicio_ruta = ServicioRuta()
-servicio_bd = ServicioBaseDatos()
-servicio_asignacion = ServicioAsignacion()
+
+# Caché temporal para pasar costos entre GET y POST de /assign
+_costos_cache = {}
+
 
 @api_blueprint.route('/calculate', methods=['POST'])
 def calcular_ruta():
@@ -14,72 +34,81 @@ def calcular_ruta():
     resultado = servicio_ruta.obtener_ruta_camion(datos.get('origin'), datos.get('destination'))
     return jsonify(resultado)
 
+
 @api_blueprint.route('/dashboard', methods=['GET'])
-def obtener_dashboard():
+def endpoint_dashboard():
     try:
-        datos = servicio_bd.obtener_datos_dashboard()
-        return jsonify(datos), 200
+        return jsonify(servicio_bd.obtener_datos_dashboard()), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+
 
 @api_blueprint.route('/conductores', methods=['GET'])
-def obtener_conductores():
+def endpoint_conductores():
     try:
-        datos = servicio_bd.obtener_datos_conductores()
-        return jsonify(datos), 200
+        return jsonify(obtener_datos_conductores()), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+
 
 @api_blueprint.route('/vehiculos', methods=['GET'])
-def obtener_vehiculos():
+def endpoint_vehiculos():
     try:
-        datos = servicio_bd.obtener_datos_vehiculos()
-        return jsonify(datos), 200
+        return jsonify(obtener_datos_vehiculos()), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+
 
 @api_blueprint.route('/assign/<cod_flete>', methods=['GET'])
-def obtener_asignaciones(cod_flete):
+def endpoint_recomendar(cod_flete):
     """
-    Endpoint que retorna las mejores opciones de transporte para un flete.
+    Calcula y retorna las 3 mejores opciones de camión para el flete.
+    Guarda en caché los costos calculados para usarlos al confirmar la asignación.
     """
     try:
-        recomendaciones = servicio_asignacion.obtener_mejores_camiones_para_flete(cod_flete)
-        return jsonify(recomendaciones), 200
+        resultado = obtener_mejores_camiones_para_flete(cod_flete)
+        for rec in resultado.get('recommendations', []):
+            key = f"{cod_flete}:{rec['cod_vehiculo']}"
+            _costos_cache[key] = rec.pop('_costos', {})
+        return jsonify(resultado), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
+
 @api_blueprint.route('/assign', methods=['POST'])
-def asignar_camion():
+def endpoint_asignar():
     """
-    Endpoint para realizar la asignación física en la base de datos.
+    Confirma la asignación. Recupera los costos del caché calculado en el GET anterior.
     """
     datos = request.json
     cod_flete = datos.get('cod_flete')
     cod_vehiculo = datos.get('cod_vehiculo')
-    
+
     if not cod_flete or not cod_vehiculo:
         return jsonify({"error": "cod_flete y cod_vehiculo son requeridos"}), 400
-        
+
     try:
-        exito, mensaje = servicio_bd.asignar_camion_a_flete(cod_flete, cod_vehiculo)
-        if exito:
-            return jsonify({"message": mensaje}), 200
-        else:
-            return jsonify({"error": mensaje}), 500
+        costos = _costos_cache.pop(f"{cod_flete}:{cod_vehiculo}", None)
+        exito, mensaje = asignar_camion(cod_flete, cod_vehiculo, costos=costos)
+        return jsonify({"message": mensaje} if exito else {"error": mensaje}), 200 if exito else 500
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
+
 @api_blueprint.route('/unassign/<cod_flete>', methods=['POST'])
-def desasignar_camion(cod_flete):
-    """
-    Endpoint para desasignar el vehículo de un flete.
-    """
+def endpoint_desasignar(cod_flete):
+    """Libera el vehículo y elimina el historial del flete."""
     try:
-        exito, mensaje = servicio_bd.desasignar_camion_de_flete(cod_flete)
-        if exito:
-            return jsonify({"message": mensaje}), 200
-        else:
-            return jsonify({"error": mensaje}), 500
+        exito, mensaje = desasignar_camion(cod_flete)
+        return jsonify({"message": mensaje} if exito else {"error": mensaje}), 200 if exito else 500
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
+@api_blueprint.route('/reporte', methods=['GET'])
+def endpoint_reporte():
+    """Retorna el reporte financiero de fletes asignados."""
+    try:
+        return jsonify(obtener_reporte()), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
