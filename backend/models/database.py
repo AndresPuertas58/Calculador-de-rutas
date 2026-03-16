@@ -83,7 +83,9 @@ class Flete(db.Model):
     estado = db.Column(db.Enum('asignado', 'sin_asignar'), default='sin_asignar')
     cod_vehiculo_asignado = db.Column(db.String(15), db.ForeignKey('vehiculos.cod_vehiculo'))
     cod_empleado_asignado = db.Column(db.String(15), db.ForeignKey('conductores.cod_empleado'))
-
+    destino = db.Column(db.String(100))
+    poliza = db.Column(db.Enum('True', 'False'), default='False')
+    valor_poliza = db.Column(db.Numeric(15, 2), default=0)
     # Relationships
     vehiculo = db.relationship('Vehiculo', backref='fletes', foreign_keys=[cod_vehiculo_asignado])
     conductor = db.relationship('Conductor', backref='fletes', foreign_keys=[cod_empleado_asignado])
@@ -109,6 +111,7 @@ class AsignacionHistorial(db.Model):
     costos_fijos = db.Column(db.Numeric(15, 2))
     costo_total = db.Column(db.Numeric(15, 2))
     venta = db.Column(db.Numeric(15, 2))
+    margin = db.Column(db.Numeric(15, 2))
 
     flete = db.relationship('Flete', backref=db.backref('historial', uselist=False))
 

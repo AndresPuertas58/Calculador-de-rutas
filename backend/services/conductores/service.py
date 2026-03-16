@@ -24,7 +24,6 @@ def obtener_datos_conductores():
         "cod_empleado": c.cod_empleado,
         "nombre": c.nombre,
         "cedula": c.cedula,
-        "licencia": c.licencia or "C3",
         "estado_operativo": c.estado_operativo or "Activo",
         "vacaciones": f"{c.vacaciones_inicio} a {c.vacaciones_fin}" if c.vacaciones_inicio else "Activo",
         "incapacidad": f"{c.incapacidad_inicio} a {c.incapacidad_fin}" if c.incapacidad_inicio else "No",

@@ -35,10 +35,10 @@ def calcular_ruta():
     return jsonify(resultado)
 
 
-@api_blueprint.route('/dashboard', methods=['GET'])
-def endpoint_dashboard():
+@api_blueprint.route('/fletes', methods=['GET'])
+def endpoint_fletes():
     try:
-        return jsonify(servicio_bd.obtener_datos_dashboard()), 200
+        return jsonify(servicio_bd.obtener_datos_fletes()), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
@@ -59,8 +59,9 @@ def endpoint_vehiculos():
         return jsonify({"error": str(e)}), 500
 
 
+
 @api_blueprint.route('/assign/<cod_flete>', methods=['GET'])
-def endpoint_recomendar(cod_flete):
+def endpoint_recomendar(cod_flete): 
     """
     Calcula y retorna las 3 mejores opciones de camión para el flete.
     Guarda en caché los costos calculados para usarlos al confirmar la asignación.
@@ -104,11 +105,13 @@ def endpoint_desasignar(cod_flete):
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
-
 @api_blueprint.route('/reporte', methods=['GET'])
 def endpoint_reporte():
-    """Retorna el reporte financiero de fletes asignados."""
+    # Capturamos los parámetros de la URL: /reporte?inicio=YYYY-MM-DD&fin=YYYY-MM-DD
+    inicio = request.args.get('inicio')
+    fin = request.args.get('fin')
+    
     try:
-        return jsonify(obtener_reporte()), 200
+        return jsonify(obtener_reporte(inicio, fin)), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500

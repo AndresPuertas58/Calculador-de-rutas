@@ -76,10 +76,12 @@ def calcular_costos_fijos(flete) -> dict:
     val_descargue = float(flete.valor_descargue or 0)
     val_escolta = float(flete.valor_escolta or 0)
     val_viaticos = float(flete.viaticos_estimados or 0)
+    val_poliza = float(flete.valor_poliza or 0)
     return {
         "valor_cargue": val_cargue,
         "valor_descargue": val_descargue,
         "valor_escolta": val_escolta,
         "viaticos_estimados": val_viaticos,
-        "total": val_cargue + val_descargue + val_escolta + val_viaticos
+        "valor_poliza": val_poliza,
+        "total": val_cargue + val_descargue + val_escolta + val_viaticos + val_poliza
     }

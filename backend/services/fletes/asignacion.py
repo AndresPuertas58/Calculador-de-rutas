@@ -1,7 +1,4 @@
-"""
-Módulo: Fletes — Asignación
-Flujo de costos: Parqueo → Origen (vacío) → Destino (cargado) → Parqueo más cercano (retorno)
-"""
+
 import math
 from datetime import datetime
 from models.database import db, Flete, Vehiculo, Conductor, AsignacionHistorial, PuntoParqueo
@@ -128,6 +125,7 @@ def obtener_mejores_camiones_para_flete(cod_flete: str) -> dict:
             "valor_descargue": fijos['valor_descargue'],
             "valor_escolta": fijos['valor_escolta'],
             "viaticos_estimados": fijos['viaticos_estimados'],
+            "valor_poliza": fijos['valor_poliza'],
             "peajes": peajes_vacio + peajes_viaje + peajes_retorno,
             "costo_peajes": costo_peajes,
             "costo_peajes_vacio": costo_peajes_vacio,
@@ -136,6 +134,7 @@ def obtener_mejores_camiones_para_flete(cod_flete: str) -> dict:
             "tiempo_total_min": round(tiempo_min, 2),
             "route_vacio_points": ruta_vacio.get('points', []),
             "route_points": ruta_cargado.get('points', []),
+            "route_retorno_points": ruta_retorno.get('points', []) if ruta_retorno else [],
             "truck_pos": [float(v.punto_parqueo.latitud), float(v.punto_parqueo.longitud)],
             "_costos": {
                 "dist_vacio_km": dist_vacio_km,
@@ -171,7 +170,8 @@ def obtener_mejores_camiones_para_flete(cod_flete: str) -> dict:
             "valor_cargue": float(flete.valor_cargue or 0),
             "valor_descargue": float(flete.valor_descargue or 0),
             "viaticos": float(flete.viaticos_estimados or 0),
-            "escolta": float(flete.valor_escolta or 0)
+            "escolta": float(flete.valor_escolta or 0),
+            "destino": flete.destino
         },
         "recommendations": top3
     }
@@ -218,7 +218,8 @@ def asignar_camion(cod_flete: str, cod_vehiculo: str, costos: dict = None) -> tu
             costo_peajes=costos.get('costo_peajes', 0) if costos else 0,
             costos_fijos=costos.get('costos_fijos', 0) if costos else 0,
             costo_total=costos.get('costo_total', 0) if costos else 0,
-            venta=float(flete.venta or 0)
+            venta=float(flete.venta or 0),
+            margin=round(((float(flete.venta) - float(costos.get('costo_total', 0))) / float(flete.venta) * 100), 2) if float(flete.venta or 0) > 0 else 0
         ))
 
         flete.cod_vehiculo_asignado = cod_vehiculo
