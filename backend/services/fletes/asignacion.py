@@ -153,9 +153,9 @@ def obtener_mejores_camiones_para_flete(cod_flete: str) -> dict:
     top3 = resultados[:3]
 
     # ── Paso 2: dentro de las 3 más baratas, mostrar primero al de menos puntos
-    # Así el cliente ve las 3 opciones económicas ordenadas de más justo a menos justo.
+    # Así el cliente ve las 3 opciones económicas ordenadas de más justo a menos justo y luego ordenar por puntos esos 3 resultados
     # La decisión final siempre la toma el cliente.
-    top3.sort(key=lambda x: x['puntos_conductor'])
+    top3.sort(key=lambda x: (x['costo_total'], x['puntos_conductor']))
 
 
     return {
