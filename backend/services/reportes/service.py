@@ -24,14 +24,28 @@ def obtener_reporte(fecha_inicio: str = None, fecha_fin: str = None) -> list:
         ).all()
 
         resultado = []
+
+        total_ventas = 0
+        total_costos = 0
+        
+        
         for h in registros:
             venta = float(h.venta or 0)
             costo = float(h.costo_total or 0)
             
-            # Cálculo de margen (prioriza el guardado, si no, calcula al vuelo)
+            total_ventas += venta
+            total_costos += costo
+        
+        margen_total_general = round(((total_ventas - total_costos) / total_ventas * 100), 2) if total_ventas > 0 else 0
+        
+        
+        for h in registros:
+            venta = float(h.venta or 0)
+            costo = float(h.costo_total or 0)
+            
             margen_calculado = float(h.margin) if h.margin is not None else \
-                               (round(((venta - costo) / venta * 100), 2) if venta > 0 else 0)
-
+                            (round(((venta - costo) / venta * 100), 2) if venta > 0 else 0)
+            
             resultado.append({
                 "cod_flete": h.cod_flete,
                 "cliente": h.flete.cliente if h.flete else "N/A",
@@ -40,10 +54,13 @@ def obtener_reporte(fecha_inicio: str = None, fecha_fin: str = None) -> list:
                 "fecha_asignacion": h.fecha_asignacion.strftime('%Y-%m-%d %H:%M'),
                 "costo_total": costo,
                 "venta": venta,
-                "margen": margen_calculado
+                "margen": margen_calculado,
+                "margen_total_general": margen_total_general 
             })
-            
+            resultados = resultado
+            print(f"datos enviados al frontes {resultados}")
         return resultado
+        
 
     except ValueError:
         raise Exception("Formato de fecha inválido. Debe ser YYYY-MM-DD")
