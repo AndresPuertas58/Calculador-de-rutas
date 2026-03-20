@@ -107,11 +107,11 @@ def endpoint_desasignar(cod_flete):
 
 @api_blueprint.route('/reporte', methods=['GET'])
 def endpoint_reporte():
-    # Capturamos los parámetros de la URL: /reporte?inicio=YYYY-MM-DD&fin=YYYY-MM-DD
     inicio = request.args.get('inicio')
     fin = request.args.get('fin')
-    
     try:
-        return jsonify(obtener_reporte(inicio, fin)), 200
+        # obtener_reporte ahora devuelve el diccionario 'respuesta_final'
+        datos = obtener_reporte(inicio, fin)
+        return jsonify(datos), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500

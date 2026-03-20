@@ -1,52 +1,42 @@
 from datetime import datetime, time
 from models.database import AsignacionHistorial
 
-def obtener_reporte(fecha_inicio: str = None, fecha_fin: str = None) -> list:
+def obtener_reporte(fecha_inicio: str = None, fecha_fin: str = None) -> dict:
+    print(f"\n>>> [LOG] Iniciando reporte: {fecha_inicio} al {fecha_fin}")
+    
     if not fecha_inicio or not fecha_fin:
-        return []
+        return {"error": "Fechas faltantes"}
 
     try:
-        # 1. Convertir y validar
+        # 1. Preparación de fechas
         start_date = datetime.strptime(fecha_inicio, '%Y-%m-%d').date()
         end_date = datetime.strptime(fecha_fin, '%Y-%m-%d').date()
+        start_dt = datetime.combine(start_date, time.min)
+        end_dt = datetime.combine(end_date, time.max)
 
-        if start_date > end_date:
-            raise Exception("La fecha de inicio no puede ser posterior a la fecha de fin.")
-
-        # 2. Ajustar el rango para incluir TODO el día final
-        # Combinamos la fecha de fin con las 23:59:59
-        start_dt = datetime.combine(start_date, time.min) # 00:00:00
-        end_dt = datetime.combine(end_date, time.max)   # 23:59:59
-
-        # 3. Consulta con objetos datetime completos
+        # 2. Consulta a la base de datos
         registros = AsignacionHistorial.query.filter(
             AsignacionHistorial.fecha_asignacion.between(start_dt, end_dt)
         ).all()
+        
+        print(f">>> [LOG] Registros encontrados: {len(registros)}")
 
-        resultado = []
-
-        total_ventas = 0
-        total_costos = 0
-        
-        
-        for h in registros:
-            venta = float(h.venta or 0)
-            costo = float(h.costo_total or 0)
-            
-            total_ventas += venta
-            total_costos += costo
-        
+        # 3. Primer paso: Calcular totales para el margen general
+        total_ventas = sum(float(h.venta or 0) for h in registros)
+        total_costos = sum(float(h.costo_total or 0) for h in registros)
         margen_total_general = round(((total_ventas - total_costos) / total_ventas * 100), 2) if total_ventas > 0 else 0
-        
-        
+
+        # 4. Segundo paso: Armar el detalle (la lista)
+        resultado_detalle = []
         for h in registros:
             venta = float(h.venta or 0)
             costo = float(h.costo_total or 0)
             
-            margen_calculado = float(h.margin) if h.margin is not None else \
-                            (round(((venta - costo) / venta * 100), 2) if venta > 0 else 0)
+            # Calculamos el margen por fila
+            margen_fila = float(h.margin) if h.margin is not None else \
+                         (round(((venta - costo) / venta * 100), 2) if venta > 0 else 0)
             
-            resultado.append({
+            resultado_detalle.append({
                 "cod_flete": h.cod_flete,
                 "cliente": h.flete.cliente if h.flete else "N/A",
                 "placa": h.placa or "",
@@ -54,13 +44,23 @@ def obtener_reporte(fecha_inicio: str = None, fecha_fin: str = None) -> list:
                 "fecha_asignacion": h.fecha_asignacion.strftime('%Y-%m-%d %H:%M'),
                 "costo_total": costo,
                 "venta": venta,
-                "margen": margen_calculado,
-                "margen_total_general": margen_total_general 
+                "margen": margen_fila,
             })
-            resultados = resultado
-            print(f"datos enviados al frontes {resultados}")
-        return resultado
-        
 
-    except ValueError:
-        raise Exception("Formato de fecha inválido. Debe ser YYYY-MM-DD")
+        # 5. ESTRUCTURA FINAL DEL JSON
+        respuesta_final = {
+            "fletes": resultado_detalle,                # La lista de objetos
+            "margen_total_general": margen_total_general, # El dato único
+            "total_registros": len(resultado_detalle)   # Metadata útil
+        }
+
+        
+        print(f"fletes individuales:{resultado_detalle} ")
+        print(f"    - Margen General: {respuesta_final['margen_total_general']}%")
+        print(f"    - Cantidad de fletes: {len(respuesta_final['fletes'])}")
+        
+        return respuesta_final
+
+    except Exception as e:
+        print(f">>> [LOG ERROR] Ocurrió un fallo: {str(e)}")
+        raise e
